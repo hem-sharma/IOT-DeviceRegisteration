@@ -68,11 +68,11 @@ function performRequest(endpoint, method, data, success) {
   // });
 }
 
-function updateConfigWithAgreegatorId(obj, val) {
+function updateConfigWithAgreegatorId(obj, val, filePath) {
 
 }
 
-function appendWiFiConfigCreds(ssid, password) {
+function appendWiFiConfigCreds(ssid, password, filePath) {
 
 }
 
