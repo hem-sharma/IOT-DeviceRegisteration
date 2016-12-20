@@ -2,7 +2,7 @@ var app = require('express')();
 var http = require('http').Server(app);
 
 //Getting config for Api
-var config = require('../APIConfig.json');
+var config = require(__dirname + '/APIConfig.json');
 
 //getting port for server process
 var processPort = config.port;
@@ -20,7 +20,7 @@ var port = new SerialPort.SerialPort(file, {
 });
 
 //GPS for getting data
-var GPS = require('../gps.js');
+var GPS = require(__dirname + '/gps.js');
 var gps = new GPS;
 
 
@@ -35,7 +35,7 @@ gps.on('GGA', function (data) {
 // });
 
 http.listen(processPort, function () {
-  console.log('listening on *:3000');
+  console.log('listening on *:' + processPort);
 });
 
 port.on('data', function (data) {
