@@ -30,9 +30,9 @@ gps.on('GGA', function (data) {
   //io.emit('position', data);
 });
 
-// app.get('/', function(req, res) {
-//   res.sendFile(__dirname + '/maps.html');
-// });
+app.get('/', function(req, res) {
+  res.sendFile(__dirname + '/index.html');
+});
 
 http.listen(processPort, function () {
   console.log('listening on *:' + processPort);
