@@ -1,5 +1,9 @@
 {
     "reciever": "/dev/ttyACM0",
     "baudrate": 4800,
-    "port": 3000
+    "port": 3000,
+    //For getting the agreegator Id
+    "GettingAgreegatorIdEndpoint": "",
+    //For sending data Api endpoint
+    "APIforSendDataEndpoint": ""
 }
