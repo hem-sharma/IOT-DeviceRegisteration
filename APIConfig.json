@@ -3,6 +3,8 @@
     "baudrate": 4800,
     "port": 3000,
     "AgreegatorId": "",
+    "HttpsAPIRequest": false,
+    "HostName": "",
     "GettingAgreegatorIdEndpoint": "",
     "APIforSendDataEndpoint": "",
     "SSID": "",
