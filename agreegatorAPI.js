@@ -39,33 +39,33 @@ app.get('/AddWifiCredentials', function (req, res) {
 });
 
 function performRequest(endpoint, method, data, success) {
-  var sender = config.HttpsAPIRequest ? https : require('http');
-  var headers = {};
-  endpoint += '?' + data;
-  
-  var options = {
-    hostname: config.HostName,
-    path: endpoint,
-    port: 443,
-    method: method,
-    agent: false
-  };
-  var req = sender.request(options, (res) => {
-    console.log('statusCode:', res.statusCode);
-    console.log('headers:', res.headers);
-    res.on('data', (d) => {
-      var resString = '' + d;
-      success(JSON.parse(resString));
-    });
-  });
-  req.end();
-  req.on('error', (e) => {
-    var customMessage = {
-      status: 500,
-      error: 'Some error for checking request'
-    };
-    success(JSON.parse(customMessage));
-  });
+  // var sender = config.HttpsAPIRequest ? https : require('http');
+  // var headers = {};
+  // endpoint += '?' + data;
+
+  // var options = {
+  //   hostname: config.HostName,
+  //   path: endpoint,
+  //   port: 443,
+  //   method: method,
+  //   agent: false
+  // };
+  // var req = sender.request(options, (res) => {
+  //   console.log('statusCode:', res.statusCode);
+  //   console.log('headers:', res.headers);
+  //   res.on('data', (d) => {
+  //     var resString = '' + d;
+  //     success(JSON.parse(resString));
+  //   });
+  // });
+  // req.end();
+  // req.on('error', (e) => {
+  //   var customMessage = {
+  //     status: 500,
+  //     error: 'Some error for checking request'
+  //   };
+  //   success(JSON.parse(customMessage));
+  // });
 }
 
 function updateConfigWithAgreegatorId(obj, val) {
