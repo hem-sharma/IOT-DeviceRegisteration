@@ -9,15 +9,12 @@ sudo apt-get install npm &
 #cloning node application
 sudo apt-get install git &
 sudo git clone https://github.com/kaushik-hemant/AgreegatorAPI &
+
 #pm2 for managing node application
 sudo npm install pm2 -g &
-
 sudo pm2 start AgreegatorAPI/agreegatorAPI.js &
-
 sudo pm2 save &
-
 sudo pm2 update &
-
 sudo env PATH=$PATH:/usr/local/bin pm2 startup -u pi 
 
 
