@@ -1,12 +1,14 @@
 {
     "reciever": "//dev//ttyACM0",
     "baudrate": 4800,
-    "port": 3000,
+    "port": 8080,
     "AgreegatorId": "",
     "HttpsAPIRequest": false,
-    "HostName": "",
+    "HostName": "http://localhost:50266",
     "GettingAgreegatorIdEndpoint": "",
-    "APIforSendDataEndpoint": "",
+    "APIforSendDataEndpoint": "/AddAgreegatorGpsData",
     "SSID": "",
-    "Password": ""
+    "Password": "",
+    "AgreegatorIdFilePath": "/APIConfig.json",
+    "WifiConfigPath": "/etc/wpa_supplicant/wpa_supplicant.conf"
 }
