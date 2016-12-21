@@ -27,8 +27,9 @@ var GPS = require(__dirname + '/gps.js');
 var gps = new GPS;
 
 gps.on('GGA', function (data) {
-  if (config.AgreegatorId !== null)
-    console.log('data recieved', data);
+  if (config.AgreegatorId !== null && config.AgreegatorType === 'D3498E79-8B6B-40F1-B96D-93AA132B2C5B')
+    return;
+  console.log('data recieved', data);
   if (config.AgreegatorId !== null)
     performRequest(config.APIforSendDataEndpoint, 'POST', {
       AgreegatorId: config.AgreegatorId,
@@ -54,8 +55,9 @@ app.get('/AssignAgreegator', function (req, res) {
   if (config.AgreegatorId !== null)
     res.sendFile(__dirname + '/wifisetup.html')
   var agreegatorId = req.body.agreegatorId;
+  var agreegatorType = req.body.agreegatortype;
   console.log('agreegator id after reg: ', agreegatorId);
-  var result = updateConfigWithAgreegatorId(agreegatorId, __dirname + config.AgreegatorIdFilePath);
+  var result = updateConfigWithAgreegatorId(agreegatorId, agreegatorType, __dirname + config.AgreegatorIdFilePath);
   res.send(result);
 });
 
@@ -99,11 +101,12 @@ function performRequest(endpoint, method, data, success) {
   });
 }
 
-function updateConfigWithAgreegatorId(val, filePath) {
+function updateConfigWithAgreegatorId(agreegatorId, agreegatorType, filePath) {
   try {
     var json = require('json-update');
     json.update(filePath, {
-      AgreegatorId: val
+      AgreegatorId: agreegatorId,
+      Agreegatortype: agreegatorType
     }, function (err, obj) {
       if (typeof err !== "undefined" && err !== null) {
         return {
