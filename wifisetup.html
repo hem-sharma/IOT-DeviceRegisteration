@@ -161,9 +161,9 @@
     <h1 style="margin-top:10px" align="center">Agreegator Wifi Registration</h1>
     <form id="msform">
         <!-- progressbar -->
-        <ul id="progressbar">
+        <!--<ul id="progressbar">
             <li class="active">Wifi Setup</li>
-        </ul>
+        </ul>-->
         <!-- fieldsets -->
         <fieldset id="step1">
             <h2 class="fs-title">WiFi Credentials</h2>
@@ -185,8 +185,8 @@
 		    $.post('/AddWifiCredentials', {ssid:$('#ssid').val(),password:$('#password').val()},function(data, status){
 				console.log(data);
                 if(data.status===true)
-                alert('Data updated successfully, Please boot up to connect.')
-                alert('Some error occured! try again later.')
+                alert('Data updated successfully, Please reboot to connect.')
+                else alert('Some error occured! try again later.')
 			});
 		});
 		    

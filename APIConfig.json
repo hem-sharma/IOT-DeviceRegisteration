@@ -4,11 +4,14 @@
     "port": 8080,
     "AgreegatorId": "",
     "HttpsAPIRequest": false,
-    "HostName": "http://localhost:50266",
+    "AgreegatorType": "",
+    "HostName": "localhost",
+    "HostPort": "50266",
     "GettingAgreegatorIdEndpoint": "",
-    "APIforSendDataEndpoint": "/AddAgreegatorGpsData",
+    "APIforSendDataEndpoint": "/api/AgreegatorController/AddAgreegatorGpsData",
     "SSID": "",
     "Password": "",
-    "AgreegatorIdFilePath": "/APIConfig.json",
+    "AgreegatorIdFilePathOrg": "/APIConfig.json",
+    "AgreegatorIdFilePath": "/test.conf",
     "WifiConfigPath": "/etc/wpa_supplicant/wpa_supplicant.conf"
 }

@@ -2,35 +2,42 @@ var app = require('express')();
 var http = require('http').Server(app);
 var https = require('https');
 var config = require(__dirname + '/APIConfig.json');
-var jsonFile = require('jsonfile');
+//var jsonFile = require('jsonfile');
 var bodyParser = require('body-parser');
+var fs = require('fs');
 var processPort = config.port;
 
 var file = config.reciever;
 
 app.use(bodyParser.urlencoded({
-    extended: true
+  extended: true
 }));
 app.use(bodyParser.json());
 
 //TODO:uncomment
-//var SerialPort = require('serialport');
+var SerialPort = require('serialport');
 
-// var port = new SerialPort.SerialPort(file, {
-//   baudrate: config.baudrate,
-//   parser: SerialPort.parsers.readline('\r\n')
-// });
+var port = new SerialPort.SerialPort(file, {
+  baudrate: config.baudrate,
+  parser: SerialPort.parsers.readline('\r\n')
+});
 
 var GPS = require(__dirname + '/gps.js');
 
 var gps = new GPS;
 
 gps.on('GGA', function (data) {
-  console.log('data recieved', data);
   if (config.AgreegatorId !== null)
-    performRequest(APIforSendDataEndpoint, 'POST', {
-      AgreegatorId: config.AgreegatorId
-    })
+    console.log('data recieved', data);
+  if (config.AgreegatorId !== null)
+    performRequest(config.APIforSendDataEndpoint, 'POST', {
+      AgreegatorId: config.AgreegatorId,
+      latitude: data.lat,
+      longitude: data.long,
+      SentDate: new Date()
+    }, function (res) {
+      console.log(res);
+    });
 });
 
 app.get('/', function (req, res) {
@@ -48,7 +55,7 @@ app.get('/AssignAgreegator', function (req, res) {
     res.sendFile(__dirname + '/wifisetup.html')
   var agreegatorId = req.body.agreegatorId;
   console.log('agreegator id after reg: ', agreegatorId);
-  var result = updateConfigWithAgreegatorId('AgreegatorId', agreegatorId, __dirname + config.AgreegatorIdFilePath);
+  var result = updateConfigWithAgreegatorId(agreegatorId, __dirname + config.AgreegatorIdFilePath);
   res.send(result);
 });
 
@@ -57,33 +64,26 @@ app.post('/AddWifiCredentials', function (req, res) {
   var password = req.body.password;
   console.log('ssid', ssid);
   console.log('password', password);
-  //config.WifiConfigPath;
-  var result = appendWiFiConfigCreds(ssid, password, __dirname + '/APIConfig.json');
+  var result = appendWiFiConfigCreds(ssid, password, config.WifiConfigPath);
   res.send(result);
 });
 
 function performRequest(endpoint, method, data, success) {
+  var querystring = require('querystring');
+  var sender = config.HttpsAPIRequest ? https : require('http');
   var headers = {};
   var dataString = JSON.stringify(data);
-  if (method == 'GET') {
-    endpoint += '?' + querystring.stringify(data);
-  } else {
-    headers = {
-      'Content-Type': 'application/json',
-      'Content-Length': dataString.length
-    };
-  }
+  endpoint += '?' + querystring.stringify(data);
   var options = {
     hostname: config.HostName,
     path: endpoint,
-    port: 443,
+    port: config.HostPort,
     method: method,
     agent: false
   };
-  var req = https.request(options, function (res) {
-    res.setEncoding('utf-8');
-    console.log('statusCode:', res.statusCode);
-    console.log('headers:', res.headers);
+  var req = sender.request(options, function (res) {
+    res.setEncoding('utf8');
+    req.write(data);
     res.on('data', function (d) {
       var resString = '' + d;
       success(JSON.parse(resString));
@@ -99,24 +99,23 @@ function performRequest(endpoint, method, data, success) {
   });
 }
 
-function updateConfigWithAgreegatorId(obj, val, filePath) {
+function updateConfigWithAgreegatorId(val, filePath) {
   try {
-    jsonFile.readFile(filePath, function (err, obj) {
-      var updateData = {
-        obj: val
-      };
-      jsonFile.writeFile(filePath, updateData, function (err) {
+    var json = require('json-update');
+    json.update(filePath, {
+      AgreegatorId: val
+    }, function (err, obj) {
+      if (typeof err !== "undefined" && err !== null) {
         return {
           status: false,
           message: err
         };
-      });
+      }
+      return {
+        status: true,
+        message: 'Agreegator Id updated successfully.'
+      };
     });
-    return {
-      status: true,
-      message: "Updated successfully!"
-    };
-
   } catch (e) {
     console.log('error occured in agreegator id update: ', e);
     return {
@@ -128,14 +127,16 @@ function updateConfigWithAgreegatorId(obj, val, filePath) {
 
 function appendWiFiConfigCreds(ssid, password, filePath) {
   try {
-    jsonFile.readFile(filePath, function (err, obj) {
-      var appendData = 'network={ssid=' + ssid + ' psk=' + password + '}';
-      jsonFile.writeFile(filePath, appendData, function (err) {
-        return {
-          status: false,
-          message: err
-        };
-      });
+    var appendData = '\nnetwork={\nssid="' + ssid + '"\npsk="' + password + '"\n}';
+    fs.appendFile(filePath, appendData, function (err) {
+      if (err) return {
+        status: false,
+        message: err
+      };
+      else return {
+        status: false,
+        message: e
+      };
     });
     return {
       status: true,
@@ -153,7 +154,7 @@ function appendWiFiConfigCreds(ssid, password, filePath) {
 http.listen(processPort, function () {
   console.log('listening on *:' + processPort);
 });
-
-// port.on('data', function (data) {
-//   gps.update(data);
-// });
+//TODO:uncomment
+port.on('data', function (data) {
+  gps.update(data);
+});

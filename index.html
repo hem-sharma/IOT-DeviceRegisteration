@@ -3,11 +3,16 @@
 <head>
     <!--<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">-->
     <style>
+        /*custom font*/
+        
         @import url(http://fonts.googleapis.com/css?family=Montserrat);
+        /*basic reset*/
+        
         * {
             margin: 0;
             padding: 0;
         }
+        
         html {
             height: 100%;
             /*Image only BG fallback*/
@@ -15,15 +20,19 @@
             /*background = gradient + image pattern combo*/
             background: linear-gradient(rgba(196, 102, 0, 0.2), rgba(155, 89, 182, 0.2)), url('http://thecodeplayer.com/uploads/media/gs.png');
         }
+        
         body {
             font-family: montserrat, arial, verdana;
         }
+        /*form styles*/
+        
         #msform {
             width: 400px;
             margin: 50px auto;
             text-align: center;
             position: relative;
         }
+        
         #msform fieldset {
             background: white;
             border: 0 none;
@@ -36,9 +45,13 @@
             /*stacking fieldsets above each other*/
             position: absolute;
         }
+        /*Hide all except first fieldset*/
+        
         #msform fieldset:not(:first-of-type) {
             display: none;
         }
+        /*inputs*/
+        
         #msform input,
         #msform textarea,
         #msform select {
@@ -52,18 +65,14 @@
             color: #2C3E50;
             font-size: 13px;
         }
-        .required {
-            /*padding: 15px;*/
-            border: 3px solid red;
-            border-radius: 3px;
-            margin-bottom: 10px;
-            width: 100%;
-            box-sizing: border-box;
-            font-family: montserrat;
-            color: #2C3E50;
-            font-size: 13px;
-            
+        
+        #msform input.required,
+        #msform textarea.required,
+        #msform select.required {
+            border: 3px solid red!important;
         }
+        /*buttons*/
+        
         #msform .action-button {
             width: 100px;
             background: #27AE60;
@@ -75,28 +84,35 @@
             padding: 10px 5px;
             margin: 10px 5px;
         }
+        
         #msform .action-button:hover,
         #msform .action-button:focus {
             box-shadow: 0 0 0 2px white, 0 0 0 3px #27AE60;
         }
+        /*headings*/
+        
         .fs-title {
             font-size: 15px;
             text-transform: uppercase;
             color: #2C3E50;
             margin-bottom: 10px;
         }
+        
         .fs-subtitle {
             font-weight: normal;
             font-size: 13px;
             color: #666;
             margin-bottom: 20px;
         }
+        /*progressbar*/
+        
         #progressbar {
             margin-bottom: 30px;
             overflow: hidden;
             /*CSS counters to number the steps*/
             counter-reset: step;
         }
+        
         #progressbar li {
             list-style-type: none;
             color: white;
@@ -106,6 +122,7 @@
             float: left;
             position: relative;
         }
+        
         #progressbar li:before {
             content: counter(step);
             counter-increment: step;
@@ -118,6 +135,8 @@
             border-radius: 3px;
             margin: 0 auto 5px auto;
         }
+        /*progressbar connectors*/
+        
         #progressbar li:after {
             content: '';
             width: 100%;
@@ -129,26 +148,37 @@
             z-index: -1;
             /*put it behind the numbers*/
         }
+        
         #progressbar li:first-child:after {
+            /*connector not needed before the first step*/
             content: none;
         }
+        /*marking active/completed steps green*/
+        /*The number of the step and the connector before it = green*/
+        
         #progressbar li.active:before,
         #progressbar li.active:after {
             background: #27AE60;
             color: white;
         }
+        
+        h1 {
+            color: #fff;
+        }
     </style>
-    <title>Chango Device Registration</title>
+    <title>Chango - Agreegator registration</title>
 </head>
 
 <body>
-    <h1 style="margin-top:10px" align="center">Agreegator Registration</h1>
+    <h1 style="margin-top:80px" align="center">Agreegator registration</h1>
+    <!-- multistep form -->
     <form id="msform">
         <!-- progressbar -->
-        <ul id="progressbar">
+        <!--<ul id="progressbar">
             <li class="active">Account Login</li>
             <li>Agreegator Details</li>
-        </ul>
+            <li>Completed</li>
+        </ul>-->
         <!-- fieldsets -->
         <fieldset id="step1">
             <h2 class="fs-title">Login your account</h2>
@@ -158,23 +188,29 @@
             <input type="button" id="btnlogin" name="next" class="next action-button" value="Login" />
         </fieldset>
         <fieldset id="step2">
-            <h2 class="fs-title">Details</h2>
+            <h2 class="fs-title">Agregator Details</h2>
             <select id="ddlSubscriptions" name="ddlSubscriptions"></select>
             <input type="text" name="agreegatorName" placeholder="Agreegator Name" id="agreegatorName" />
             <input type="text" name="agreegatorLocation" id="agreegatorLocation" placeholder="Agreegator Location" />
             <input type="text" name="agreegatorIPAddress" id="agreegatorIPAddress" placeholder="IP Address" />
+            <select id="ddlAgreegatorType" name="ddlAgreegatorType"></select>
             <input type="button" id="btnSubmit" name="next" class="next action-button" value="Submit" />
         </fieldset>
+        <fieldset id="step3">
+            <h2 class="fs-title">Agreegator registeration completed</h2>
+            <br>
+            <p>
+                Agreegator registration has been completed successfully.Please login to portal and add camera.
+            </p>
+        </fieldset>
     </form>
+    <!-- jQuery -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <!-- jQuery easing plugin -->
     <script>
         $(function () {
-			
-            //jQuery time
-            var current_fs, next_fs, previous_fs; //fieldsets
-            var left, opacity, scale; //fieldset properties which we will animate
-            var animating; //flag to prevent quick multi-click glitches
-
+			var apiURL="http://localhost:50266/";
+            
 			$("#btnlogin").click(function(event){
 			if($("#username").val()=='')
 			{
@@ -194,10 +230,9 @@
 			{
 			$("#password").removeClass("required");
 			}
-			var url='http://localhost:50266/api/AccountsController/Login?UserName='+$("#username").val()+'&Password='+$("#password").val();
+			var url=apiURL+'api/AccountsController/Login?UserName='+$("#username").val()+'&Password='+$("#password").val();
 		    $.post(url,function(data, status){
-				alert("Data: " + data + "\nStatus: " + status);
-				console.log(data);
+				
 				if(data==null)
 				{
 					return false;
@@ -209,6 +244,13 @@
 				$(data["SelfSubscriptionList"]).each(function(index,item){
 					$("#ddlSubscriptions").append("<option value="+item['SubscriptionId']+">"+item['SubscriptionName']+" ("+item['Alias']+")"+"</option>");
 				});
+                //bind agreegator type
+                var agreegatorTypeURL=apiURL+"api/AgreegatorController/GetAggregatorType";
+                $.get(agreegatorTypeURL,function(data,status){
+                    $(data).each(function(index,item){
+                        $("#ddlAgreegatorType").append("<option value="+item['Id']+">"+item['Name']+"</option>");
+                    });
+                })
 				  $("#step1").hide();
 				  $("#step2").show();
 				}
@@ -217,32 +259,53 @@
 		    
             $("#btnSubmit").click(function () {
 			//adding location first
-			var locationurl="http://localhost:50266/api/LocationController/AddNewLocation";
+            var x=true;
+           $("input").each(function(index,item){
+        if($(this).val()=='')
+        {
+                $(this).addClass("required");
+                x=false;
+        }
+        else{
+            $(this).removeClass("required");
+        }
+
+           });
+        if(x)
+        {
+			var locationurl=apiURL+"api/LocationController/AddNewLocation";
                 $.post(locationurl,
 				{
 					LocationAddress:"",
-					LocationName:$("#ddlSubscriptions").val(),
+					LocationName:$("#agreegatorLocation").val(),
 					Tags:null,
 					SubscriberId:$("#hdnSubscriberId").val(),
 					SubscriptionId:$("#ddlSubscriptions").val()
 				},
 				function(data, status){
 					console.log(data);
-					var AgreegatorUrl="http://localhost:50266/api/AgreegatorController/AddNewAgreegator";
+					var AgreegatorUrl=apiURL+"api/AgreegatorController/AddNewAgreegator";
 					$.post(AgreegatorUrl,
 					{
 						SubscriberId:$("#hdnSubscriberId").val(),
 						SubscriptionId:$("#ddlSubscriptions").val(),
 						AgreegatorName:$("#agreegatorName").val(),
 						Location:data,
-						IPAddress:$("#agreegatorIPAddress").val()
+						IPAddress:$("#agreegatorIPAddress").val(),
+                        AggregatorTypeId:$("#ddlAgreegatorType").val()
 					},
 					function(newdata, status){
 						console.log(newdata);
+                        $.get("/addAgreegatorId?agreegatorId="+newdata,function(){
+                              $("#step2").hide();
+				                 $("#step3").show();
+                        });
 					});
 				});
+            }
 			});
         });
     </script>
 </body>
+
 </html>
