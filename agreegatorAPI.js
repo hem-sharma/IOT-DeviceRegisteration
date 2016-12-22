@@ -28,17 +28,19 @@ var gps = new GPS;
 
 gps.on('GGA', function (data) {
   if (config.AgreegatorId !== null && config.AgreegatorType === 'D3498E79-8B6B-40F1-B96D-93AA132B2C5B')
-    return;
-  console.log('data recieved', data);
-  if (config.AgreegatorId !== null)
-    performRequest(config.APIforSendDataEndpoint, 'POST', {
-      AgreegatorId: config.AgreegatorId,
-      latitude: data.lat,
-      longitude: data.lon,
-      SentDate: new Date().toISOString()
-    }, function (res) {
-      console.log(res);
-    });
+    console.log('Agreegator Id, type found', config.AgreegatorId, config.AgreegatorType);
+  else {
+    console.log('data recieved', data);
+    if (config.AgreegatorId !== null)
+      performRequest(config.APIforSendDataEndpoint, 'POST', {
+        AgreegatorId: config.AgreegatorId,
+        latitude: data.lat,
+        longitude: data.lon,
+        SentDate: new Date().toISOString()
+      }, function (res) {
+        console.log(res);
+      });
+  }
 });
 
 app.get('/', function (req, res) {
@@ -105,7 +107,7 @@ function performRequest(endpoint, method, data, success) {
       success(resString);
     });
   });
-  
+
   req.on('error', function (e) {
     var customMessage = {
       status: 500,
