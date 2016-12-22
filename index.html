@@ -295,7 +295,8 @@
 					},
 					function(newdata, status){
 						console.log(newdata);
-                        $.post("/AssignAgreegator",{AgreegatorId:newdata,AgreegatorType:$("#ddlAgreegatorType").val()},function(){
+                        $.post("/AssignAgreegator",{AgreegatorId:newdata,AgreegatorType:$("#ddlAgreegatorType").val()},function(res){
+                            console.log(res);
                               $("#step2").hide();
 				                 $("#step3").show();
                         });

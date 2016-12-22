@@ -121,6 +121,7 @@ function performRequest(endpoint, method, data, success) {
 
 function updateConfigWithAgreegatorId(agreegatorId, agreegatorType, filePath) {
   try {
+    console.log('filePath: ',filePath)
     var json = require('json-update');
     json.update(filePath, {
       AgreegatorId: agreegatorId,
