@@ -66,8 +66,10 @@ app.post('/AssignAgreegator', function (req, res) {
   var agreegatorId = req.body.AgreegatorId;
   var agreegatorType = req.body.AgreegatorType;
   console.log('agreegator id after reg: ', agreegatorId);
-  var result = updateConfigWithAgreegatorId(agreegatorId, agreegatorType, __dirname + config.AgreegatorIdFilePath);
-  res.send(result);
+  updateConfigWithAgreegatorId(agreegatorId, agreegatorType, __dirname + config.AgreegatorIdFilePath, function (response) {
+    res.send(response);
+  });
+
 });
 
 app.post('/AddWifiCredentials', function (req, res) {
@@ -128,7 +130,7 @@ function performRequest(endpoint, method, data, success) {
   req.end();
 }
 
-function updateConfigWithAgreegatorId(agreegatorId, agreegatorType, filePath) {
+function updateConfigWithAgreegatorId(agreegatorId, agreegatorType, filePath, callback) {
   try {
     console.log('filePath: ', filePath)
     var json = require('json-update');
@@ -137,24 +139,24 @@ function updateConfigWithAgreegatorId(agreegatorId, agreegatorType, filePath) {
       AgreegatorType: agreegatorType
     }, function (err, obj) {
       if (typeof err !== "undefined" && err !== null) {
-        return {
+        callback({
           status: false,
           message: err
-        };
+        });
       }
       var contents = fs.readFileSync(__dirname + config.AgreegatorIdFilePath);
       config = JSON.parse(contents);
-      return {
+      callback({
         status: true,
         message: 'Agreegator Id updated successfully.'
-      };
+      });
     });
   } catch (e) {
     console.log('error occured in agreegator id update: ', e);
-    return {
+    callback({
       status: false,
       message: e
-    };
+    });
   }
 }
 
