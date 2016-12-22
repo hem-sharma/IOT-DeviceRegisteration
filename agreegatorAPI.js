@@ -4,6 +4,7 @@ var https = require('https');
 var config = require(__dirname + '/APIConfig.json');
 //var jsonFile = require('jsonfile');
 var bodyParser = require('body-parser');
+var Promise = require('es6-promise').Promise;
 var fs = require('fs');
 var processPort = config.port;
 
