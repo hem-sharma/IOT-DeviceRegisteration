@@ -15,12 +15,12 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 // TODO:comment if local
-var SerialPort = require('serialport');
+// var SerialPort = require('serialport');
 
-var port = new SerialPort.SerialPort(file, {
-  baudrate: config.baudrate,
-  parser: SerialPort.parsers.readline('\r\n')
-});
+// var port = new SerialPort.SerialPort(file, {
+//   baudrate: config.baudrate,
+//   parser: SerialPort.parsers.readline('\r\n')
+// });
 
 var GPS = require(__dirname + '/gps.js');
 
@@ -55,7 +55,7 @@ app.get('/dynaptwifisetup', function (req, res) {
   res.sendFile(__dirname + '/wifisetup.html');
 });
 
-app.get('/AssignAgreegator', function (req, res) {
+app.post('/AssignAgreegator', function (req, res) {
   if (config.AgreegatorId !== null)
     res.sendFile(__dirname + '/wifisetup.html')
   var agreegatorId = req.body.agreegatorId;
@@ -176,6 +176,6 @@ http.listen(processPort, function () {
   console.log('listening on *:' + processPort);
 });
 //TODO:comment if local
-port.on('data', function (data) {
-  gps.update(data);
-});
+// port.on('data', function (data) {
+//   gps.update(data);
+// });
