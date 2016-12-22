@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-//TODO:uncomment
+// TODO:comment if local
 var SerialPort = require('serialport');
 
 var port = new SerialPort.SerialPort(file, {
@@ -34,20 +34,22 @@ gps.on('GGA', function (data) {
     performRequest(config.APIforSendDataEndpoint, 'POST', {
       AgreegatorId: config.AgreegatorId,
       latitude: data.lat,
-      longitude: data.long,
-      SentDate: new Date()
+      longitude: data.lon,
+      SentDate: new Date().toISOString()
     }, function (res) {
       console.log(res);
     });
 });
 
 app.get('/', function (req, res) {
-  if (config.AgreegatorId !== null)
+  if (config.AgreegatorId && config.AgreegatorType === 'D3498E79-8B6B-40F1-B96D-93AA132B2C5B')
     res.sendFile(__dirname + '/wifisetup.html');
-  res.sendFile(__dirname + '/index.html');
+  else if (!config.AgreegatorId)
+    res.sendFile(__dirname + '/index.html');
+  else res.send("Already registered.");
 });
 
-app.get('/wifisetup', function (req, res) {
+app.get('/dynaptwifisetup', function (req, res) {
   res.sendFile(__dirname + '/wifisetup.html');
 });
 
@@ -70,6 +72,18 @@ app.post('/AddWifiCredentials', function (req, res) {
   res.send(result);
 });
 
+//test
+// app.get('/test', function (req, res) {
+//   performRequest(config.APIforSendDataEndpoint, 'POST', {
+//     AgreegatorId: 'D3498E79-8B6B-40F1-B96D-93AA132B2C5B',
+//     latitude: '20.964161',
+//     longitude: '656.49416161',
+//     SentDate: new Date().toISOString()
+//   }, function (res) {
+//     console.log(res);
+//   });
+// });
+
 function performRequest(endpoint, method, data, success) {
   var querystring = require('querystring');
   var sender = config.HttpsAPIRequest ? https : require('http');
@@ -84,14 +98,14 @@ function performRequest(endpoint, method, data, success) {
     agent: false
   };
   var req = sender.request(options, function (res) {
-    res.setEncoding('utf8');
-    req.write(data);
+    // res.setEncoding('utf8');
+    // req.write(data);
     res.on('data', function (d) {
       var resString = '' + d;
       success(JSON.parse(resString));
     });
   });
-  req.end();
+  
   req.on('error', function (e) {
     var customMessage = {
       status: 500,
@@ -99,6 +113,7 @@ function performRequest(endpoint, method, data, success) {
     };
     success(JSON.parse(customMessage));
   });
+  req.end();
 }
 
 function updateConfigWithAgreegatorId(agreegatorId, agreegatorType, filePath) {
@@ -157,7 +172,7 @@ function appendWiFiConfigCreds(ssid, password, filePath) {
 http.listen(processPort, function () {
   console.log('listening on *:' + processPort);
 });
-//TODO:uncomment
+//TODO:comment if local
 port.on('data', function (data) {
   gps.update(data);
 });

@@ -210,7 +210,6 @@
     <script>
         $(function () {
 			var apiURL="http://localhost:50266/";
-            
 			$("#btnlogin").click(function(event){
 			if($("#username").val()=='')
 			{
@@ -296,7 +295,7 @@
 					},
 					function(newdata, status){
 						console.log(newdata);
-                        $.post("/AssignAgreegator",{AgreegatorId:newdata,"AgreegatorType:$("#ddlAgreegatorType").val()},function(){
+                        $.post("/AssignAgreegator",{AgreegatorId:newdata,AgreegatorType:$("#ddlAgreegatorType").val()},function(){
                               $("#step2").hide();
 				                 $("#step3").show();
                         });
