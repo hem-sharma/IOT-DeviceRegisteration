@@ -102,7 +102,7 @@ function performRequest(endpoint, method, data, success) {
     // req.write(data);
     res.on('data', function (d) {
       var resString = '' + d;
-      success(JSON.parse(resString));
+      success(resString);
     });
   });
   
