@@ -27,7 +27,7 @@ var GPS = require(__dirname + '/gps.js');
 var gps = new GPS;
 
 gps.on('GGA', function (data) {
-  if (config.AgreegatorId !== null && config.AgreegatorType === 'D3498E79-8B6B-40F1-B96D-93AA132B2C5B')
+  if (!config.AgreegatorId && config.AgreegatorType !== 'D3498E79-8B6B-40F1-B96D-93AA132B2C5B')
     console.log('Agreegator Id, type found', config.AgreegatorId, config.AgreegatorType);
   else {
     console.log('data recieved', data.lat, data.lon);
