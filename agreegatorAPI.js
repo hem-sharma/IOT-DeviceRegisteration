@@ -30,7 +30,7 @@ gps.on('GGA', function (data) {
   if (config.AgreegatorId !== null && config.AgreegatorType === 'D3498E79-8B6B-40F1-B96D-93AA132B2C5B')
     console.log('Agreegator Id, type found', config.AgreegatorId, config.AgreegatorType);
   else {
-    console.log('data recieved', data);
+    console.log('data recieved', data.lat, data.lon);
     if (config.AgreegatorId !== null)
       performRequest(config.APIforSendDataEndpoint, 'POST', {
         AgreegatorId: config.AgreegatorId,
