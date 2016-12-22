@@ -99,6 +99,7 @@ function performRequest(endpoint, method, data, success) {
     method: method,
     agent: false
   };
+  console.log('options for sending request', options);
   var req = sender.request(options, function (res) {
     // res.setEncoding('utf8');
     // req.write(data);
