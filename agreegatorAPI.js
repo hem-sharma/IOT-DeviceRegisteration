@@ -15,23 +15,27 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 // TODO:comment if local
-// var SerialPort = require('serialport');
+var SerialPort = require('serialport');
 
-// var port = new SerialPort.SerialPort(file, {
-//   baudrate: config.baudrate,
-//   parser: SerialPort.parsers.readline('\r\n')
-// });
+var port = new SerialPort.SerialPort(file, {
+  baudrate: config.baudrate,
+  parser: SerialPort.parsers.readline('\r\n')
+});
 
 var GPS = require(__dirname + '/gps.js');
 
 var gps = new GPS;
 
 gps.on('GGA', function (data) {
-  if (!config.AgreegatorId && config.AgreegatorType !== 'D3498E79-8B6B-40F1-B96D-93AA132B2C5B')
+  var contents = fs.readFileSync(__dirname + config.AgreegatorIdFilePath);
+  config = JSON.parse(contents);
+  if (!config.AgreegatorId && config.AgreegatorType.toUpperCase() !== 'D3498E79-8B6B-40F1-B96D-93AA132B2C5B')
     console.log('Agreegator Id, type found', config.AgreegatorId, config.AgreegatorType);
   else {
     console.log('data recieved', data.lat, data.lon);
-    if (config.AgreegatorId !== null)
+    if (config.AgreegatorId !== null) {
+      var contents = fs.readFileSync(__dirname + config.AgreegatorIdFilePath);
+      config = JSON.parse(contents);
       performRequest(config.APIforSendDataEndpoint, 'POST', {
         AgreegatorId: config.AgreegatorId,
         latitude: data.lat,
@@ -40,11 +44,14 @@ gps.on('GGA', function (data) {
       }, function (res) {
         console.log(res);
       });
+    }
   }
 });
 
 app.get('/', function (req, res) {
-  if (config.AgreegatorId && config.AgreegatorType === 'D3498E79-8B6B-40F1-B96D-93AA132B2C5B')
+  var contents = fs.readFileSync(__dirname + config.AgreegatorIdFilePath);
+  config = JSON.parse(contents);
+  if (config.AgreegatorId && config.AgreegatorType.toUpperCase() === 'D3498E79-8B6B-40F1-B96D-93AA132B2C5B')
     res.sendFile(__dirname + '/wifisetup.html');
   else if (!config.AgreegatorId)
     res.sendFile(__dirname + '/index.html');
@@ -56,16 +63,16 @@ app.get('/dynaptwifisetup', function (req, res) {
 });
 
 app.post('/AssignAgreegator', function (req, res) {
-  if (config.AgreegatorId !== null)
-    res.sendFile(__dirname + '/wifisetup.html')
-  var agreegatorId = req.body.agreegatorId;
-  var agreegatorType = req.body.agreegatortype;
+  var agreegatorId = req.body.AgreegatorId;
+  var agreegatorType = req.body.AgreegatorType;
   console.log('agreegator id after reg: ', agreegatorId);
   var result = updateConfigWithAgreegatorId(agreegatorId, agreegatorType, __dirname + config.AgreegatorIdFilePath);
   res.send(result);
 });
 
 app.post('/AddWifiCredentials', function (req, res) {
+  var contents = fs.readFileSync(__dirname + config.AgreegatorIdFilePath);
+  config = JSON.parse(contents);
   var ssid = req.body.ssid;
   var password = req.body.password;
   console.log('ssid', ssid);
@@ -87,6 +94,8 @@ app.post('/AddWifiCredentials', function (req, res) {
 // });
 
 function performRequest(endpoint, method, data, success) {
+  var contents = fs.readFileSync(__dirname + config.AgreegatorIdFilePath);
+  config = JSON.parse(contents);
   var querystring = require('querystring');
   var sender = config.HttpsAPIRequest ? https : require('http');
   var headers = {};
@@ -121,11 +130,11 @@ function performRequest(endpoint, method, data, success) {
 
 function updateConfigWithAgreegatorId(agreegatorId, agreegatorType, filePath) {
   try {
-    console.log('filePath: ',filePath)
+    console.log('filePath: ', filePath)
     var json = require('json-update');
     json.update(filePath, {
       AgreegatorId: agreegatorId,
-      Agreegatortype: agreegatorType
+      AgreegatorType: agreegatorType
     }, function (err, obj) {
       if (typeof err !== "undefined" && err !== null) {
         return {
@@ -133,6 +142,8 @@ function updateConfigWithAgreegatorId(agreegatorId, agreegatorType, filePath) {
           message: err
         };
       }
+      var contents = fs.readFileSync(__dirname + config.AgreegatorIdFilePath);
+      config = JSON.parse(contents);
       return {
         status: true,
         message: 'Agreegator Id updated successfully.'
@@ -156,10 +167,12 @@ function appendWiFiConfigCreds(ssid, password, filePath) {
         message: err
       };
       else return {
-        status: false,
-        message: e
+        status: true,
+        message: "updated successfully."
       };
     });
+    var contents = fs.readFileSync(__dirname + config.AgreegatorIdFilePath);
+    config = JSON.parse(contents);
     return {
       status: true,
       message: "Updated successfully!"
@@ -177,6 +190,6 @@ http.listen(processPort, function () {
   console.log('listening on *:' + processPort);
 });
 //TODO:comment if local
-// port.on('data', function (data) {
-//   gps.update(data);
-// });
+port.on('data', function (data) {
+  gps.update(data);
+});
