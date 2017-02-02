@@ -2,6 +2,7 @@
   "reciever": "//dev//ttyACM0",
   "baudrate": 4800,
   "port": 8080,
+  "bootupStarterPort": 8090,
   "AgreegatorId": "",
   "AgreegatorType": "",
   "HostName": "587cc77d6b364ffa82c5e1c7ae45cfef.cloudapp.net",

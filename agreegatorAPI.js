@@ -2,12 +2,10 @@ var app = require('express')();
 var http = require('http').Server(app);
 var https = require('https');
 var config = require(__dirname + '/APIConfig.json');
-//var jsonFile = require('jsonfile');
 var bodyParser = require('body-parser');
 var Promise = require('es6-promise').Promise;
 var fs = require('fs');
 var processPort = config.port;
-
 var file = config.reciever;
 
 app.use(bodyParser.urlencoded({
@@ -33,8 +31,9 @@ gps.on('GGA', function (data) {
   if (!config.AgreegatorId && config.AgreegatorType.toUpperCase() !== 'D3498E79-8B6B-40F1-B96D-93AA132B2C5B')
     console.log('Agreegator Id, type found', config.AgreegatorId, config.AgreegatorType);
   else {
-    console.log('data recieved', data.lat, data.lon);
-    if (config.AgreegatorId !== null) {
+    //console.log(data);
+    console.log('data recieved', data.lat, data.lon, new Date().toString());
+    if (config.AgreegatorId !== null && data && data.lat && data.lon) {
       var contents = fs.readFileSync(__dirname + config.AgreegatorIdFilePath);
       config = JSON.parse(contents);
       performRequest(config.APIforSendDataEndpoint, 'POST', {
@@ -84,17 +83,6 @@ app.post('/AddWifiCredentials', function (req, res) {
   res.send(result);
 });
 
-//test
-// app.get('/test', function (req, res) {
-//   performRequest(config.APIforSendDataEndpoint, 'POST', {
-//     AgreegatorId: 'D3498E79-8B6B-40F1-B96D-93AA132B2C5B',
-//     latitude: '20.964161',
-//     longitude: '656.49416161',
-//     SentDate: new Date().toISOString()
-//   }, function (res) {
-//     console.log(res);
-//   });
-// });
 
 function performRequest(endpoint, method, data, success) {
   var contents = fs.readFileSync(__dirname + config.AgreegatorIdFilePath);
@@ -111,7 +99,7 @@ function performRequest(endpoint, method, data, success) {
     method: method,
     agent: false
   };
-  console.log('options for sending request', options);
+  //console.log('options for sending request', options);
   var req = sender.request(options, function (res) {
     // res.setEncoding('utf8');
     // req.write(data);
