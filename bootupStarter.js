@@ -12,7 +12,7 @@ setTimeout(function () {
 }, 10000);
 
 http.listen(processPort, function () {
-    console.log('agreegator bootup restarter running on *:' + processPort);
+    console.log('agreegator bootupStarter running on *:' + processPort);
 });
 
 //restart agreegator api once after bootup assuring gps device connected perfectly

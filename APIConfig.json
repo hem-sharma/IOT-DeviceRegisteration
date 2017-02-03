@@ -5,7 +5,7 @@
   "bootupStarterPort": 8090,
   "gpsServerPort": 8081,
   "gpsStarterPort": 8091,
-  "AgreegatorId": "",
+  "AgreegatorId": "D3498E79-8B6B-40F1-B96D-93AA132B2C5B",
   "AgreegatorType": "D3498E79-8B6B-40F1-B96D-93AA132B2C5B",
   "HostName": "587cc77d6b364ffa82c5e1c7ae45cfef.cloudapp.net",
   "HttpsAPIRequest": false,
