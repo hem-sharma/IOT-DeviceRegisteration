@@ -14,39 +14,39 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 // TODO:comment if local
-var SerialPort = require('serialport');
+// var SerialPort = require('serialport');
 
-var port = new SerialPort.SerialPort(file, {
-  baudrate: config.baudrate,
-  parser: SerialPort.parsers.readline('\r\n')
-});
+// var port = new SerialPort.SerialPort(file, {
+//   baudrate: config.baudrate,
+//   parser: SerialPort.parsers.readline('\r\n')
+// });
 
-var GPS = require(__dirname + '/gps.js');
+// var GPS = require(__dirname + '/gps.js');
 
-var gps = new GPS;
+// var gps = new GPS;
 
-gps.on('GGA', function (data) {
-  var contents = fs.readFileSync(__dirname + config.AgreegatorIdFilePath);
-  config = JSON.parse(contents);
-  if (!config.AgreegatorId && config.AgreegatorType.toUpperCase() !== 'D3498E79-8B6B-40F1-B96D-93AA132B2C5B')
-    console.log('Agreegator Id, type found', config.AgreegatorId, config.AgreegatorType);
-  else {
-    //console.log(data);
-    console.log('data recieved', data.lat, data.lon, new Date().toString());
-    if (config.AgreegatorId !== null && data && data.lat && data.lon) {
-      var contents = fs.readFileSync(__dirname + config.AgreegatorIdFilePath);
-      config = JSON.parse(contents);
-      performRequest(config.APIforSendDataEndpoint, 'POST', {
-        AgreegatorId: config.AgreegatorId,
-        latitude: data.lat,
-        longitude: data.lon,
-        SentDate: new Date().toISOString()
-      }, function (res) {
-        console.log(res);
-      });
-    }
-  }
-});
+// gps.on('GGA', function (data) {
+//   var contents = fs.readFileSync(__dirname + config.AgreegatorIdFilePath);
+//   config = JSON.parse(contents);
+//   if (!config.AgreegatorId && config.AgreegatorType.toUpperCase() !== 'D3498E79-8B6B-40F1-B96D-93AA132B2C5B')
+//     console.log('Agreegator Id, type found', config.AgreegatorId, config.AgreegatorType);
+//   else {
+//     //console.log(data);
+//     console.log('data recieved', data.lat, data.lon, new Date().toString());
+//     if (config.AgreegatorId !== null && data && data.lat && data.lon) {
+//       var contents = fs.readFileSync(__dirname + config.AgreegatorIdFilePath);
+//       config = JSON.parse(contents);
+//       performRequest(config.APIforSendDataEndpoint, 'POST', {
+//         AgreegatorId: config.AgreegatorId,
+//         latitude: data.lat,
+//         longitude: data.lon,
+//         SentDate: new Date().toISOString()
+//       }, function (res) {
+//         console.log(res);
+//       });
+//     }
+//   }
+// });
 
 app.get('/', function (req, res) {
   var contents = fs.readFileSync(__dirname + config.AgreegatorIdFilePath);
@@ -180,7 +180,8 @@ function appendWiFiConfigCreds(ssid, password, filePath) {
 http.listen(processPort, function () {
   console.log('listening on *:' + processPort);
 });
+
 //TODO:comment if local
-port.on('data', function (data) {
-  gps.update(data);
-});
+// port.on('data', function (data) {
+//   gps.update(data);
+// });

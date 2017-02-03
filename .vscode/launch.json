@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceRoot}/agreegatorAPI.js",
+            "program": "${workspaceRoot}/gpsStarter.js",
             "cwd": "${workspaceRoot}"
         },
         {

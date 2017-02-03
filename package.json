@@ -1,0 +1,24 @@
+{
+    "name": "aggregatorapiserver",
+    "preferGlobal": true,
+    "version": "0.0.1",
+    "author": "Dynapt Solutions",
+    "description": "Agreegator Registration and gps server and bootup starters",
+    "license": "MIT",
+    "engines": {
+        "node": ">=0.10"
+    },
+    "scripts": {
+        "start": "sh /init.sh"
+    },
+    "dependencies": {
+        "express": "~3.4.8",
+        "http": "~0.0.0",
+        "es6-promise": "~4.0.5",
+        "https": "1.0.0",
+        "child_process": "1.0.2",
+        "fs": "0.0.1",
+        "body-parser": "1.15.2",
+        "serialport": "*"
+    }
+}
