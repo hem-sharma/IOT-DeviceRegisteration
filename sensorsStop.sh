@@ -1,2 +1,2 @@
-pm2 stop sensorAppStarter.js
-pm2 restart gpsStarter.js
+pm2 stop sensorServer.js
+pm2 start sensorAppStarter.js
