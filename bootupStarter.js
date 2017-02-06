@@ -10,11 +10,11 @@ console.log('agreegator app bootupStarter running @ ' + processPort);
 
 app.listen(processPort, function () {
     setTimeout(function () {
-        restartProcessForGps();
+        appStarter();
     }, bootupTime);
 })
 
-function restartProcessForGps() {
+function appStarter() {
     child = exec('sh ' + __dirname + '/appRestart.sh',
         function (error, stdout, stderr) {
             console.log('agreegator app restart after ' + bootupTime + ' sec, stdout: ' + stdout);
@@ -23,5 +23,5 @@ function restartProcessForGps() {
                 console.log('agreegator app restart after ' + bootupTime + ' sec, error: ' + error);
             }
         }
-    );
+    )
 }

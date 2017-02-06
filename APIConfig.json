@@ -15,8 +15,8 @@
   "HostPort": "80",
   "GettingAgreegatorIdEndpoint": "",
   "APIforSendDataEndpoint": "/api/AgreegatorController/AddAgreegatorGpsData",
-  "SSID": "",
-  "Password": "",
+  "SSID": "Default",
+  "Password": "Default",
   "AgreegatorIdFilePath": "/APIConfig.json",
   "WifiConfigPath": "/etc/wpa_supplicant/wpa_supplicant.conf"
 }
