@@ -1,9 +1,9 @@
 var app = require('express')();
 var config = require(__dirname + '/APIConfig.json');
 var Promise = require('es6-promise').Promise;
-var processPort = config.bootupStarterPort;
+var processPort = config.sensorAppStarterPort;
 var exec = require('child_process').exec,
-    child;
+    child, intervalTime = config.sensorServerInterval;
 
 var alreadyStarted = false,
     alreadyStopped = true;
@@ -13,7 +13,7 @@ console.log('sensor app starter running @ ' + processPort + ' on ', new Date())
 app.listen(processPort, function () {
     setInterval(function () {
         processInitiator();
-    }, 10000);
+    }, intervalTime);
 })
 
 function processInitiator() {

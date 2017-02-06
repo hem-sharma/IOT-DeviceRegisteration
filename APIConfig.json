@@ -3,6 +3,8 @@
   "baudrate": 4800,
   "port": 8080,
   "bootupStarterPort": 8090,
+  "sensorAppStarterPort": 8091,
+  "sensorServerInterval": 10000,
   "bootUpRestartTime": 10000,
   "gpsServerPort": 8081,
   "gpsStarterPort": 8091,
