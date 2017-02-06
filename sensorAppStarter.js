@@ -7,7 +7,7 @@ var exec = require('child_process').exec,
 var alreadyStarted = false,
     alreadyStopped = true;
 
-console.log('sensor app starter running @ ' + processPort + ' on ', new Date().toISOString())
+console.log('sensor app starter running @ ' + processPort + ' on ', new Date())
 
 setTimeout(function () {
     processInitiator();
@@ -15,6 +15,7 @@ setTimeout(function () {
 
 
 function processInitiator() {
+    console.log('function called for execution @ ', new Date())
     if (!isNUllOrEmpty(config.AgreegatorId) && !isNUllOrEmpty(config.AgreegatorType) &&
         config.AgreegatorType.toUpperCase() == 'D3498E79-8B6B-40F1-B96D-93AA132B2C5B') {
         if (!alreadyStarted)
@@ -39,13 +40,13 @@ function isNUllOrEmpty(value) {
 function startProcessForSensors() {
     child = exec('sh ' + __dirname + '/sensorsStart.sh',
         function (error, stdout, stderr) {
-            console.log('Current time: ', new Date().toISOString())
+            console.log('Current time: ', new Date())
             console.log('sensor app start event: after 5 sec, stdout: ' + stdout)
             console.log('sensor app start event: after 5 sec, stderr: ' + stderr)
             alreadyStarted = true;
             alreadyStopped = false;
             if (error !== null) {
-                console.log('Current time: ', new Date().toISOString())
+                console.log('Current time: ', new Date())
                 console.log('sensor app start event after 5 sec, error: ' + error)
             }
         }
@@ -55,13 +56,13 @@ function startProcessForSensors() {
 function stopProcessForSensors() {
     child = exec('sh ' + __dirname + '/sensorsStop.sh',
         function (error, stdout, stderr) {
-            console.log('Current time: ', new Date().toISOString())
+            console.log('Current time: ', new Date())
             console.log('sensor app stop event: after 5 sec, stdout: ' + stdout)
             console.log('sensor app stop event: after 5 sec, stderr: ' + stderr)
             alreadyStarted = false;
             alreadyStopped = true;
             if (error !== null) {
-                console.log('Current time: ', new Date().toISOString())
+                console.log('Current time: ', new Date())
                 console.log('sensor app stop event after 5 sec, error: ' + error)
             }
         }
