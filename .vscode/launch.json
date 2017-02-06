@@ -8,14 +8,15 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceRoot}/gpsStarter.js",
+            "program": "${workspaceRoot}/sensorAppStarter.js",
             "cwd": "${workspaceRoot}"
         },
         {
             "type": "node",
             "request": "attach",
             "name": "Attach to Process",
-            "port": 5858
+            "port": 8091,
+            "address":"192.168.0.65"
         }
     ]
 }

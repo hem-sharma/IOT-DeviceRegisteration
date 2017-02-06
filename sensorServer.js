@@ -4,6 +4,7 @@ var https = require('https');
 var config = require(__dirname + '/APIConfig.json');
 var Promise = require('es6-promise').Promise;
 var processPort = config.gpsServerPort;
+var fs = require('fs');
 var file = config.reciever;
 
 var SerialPort = require('serialport');
