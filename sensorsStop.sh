@@ -1,2 +1,2 @@
-pm2 stop -f sensorServer.js &&
-pm2 start -f sensorAppStarter.js
+pm2 stop sensorServer.js &&
+pm2 start sensorAppStarter.js

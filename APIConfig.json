@@ -3,6 +3,7 @@
   "baudrate": 4800,
   "port": 8080,
   "bootupStarterPort": 8090,
+  "bootUpRestartTime": 10000,
   "gpsServerPort": 8081,
   "gpsStarterPort": 8091,
   "AgreegatorId": "D3498E79-8B6B-40F1-B96D-93AA132B2C5B",
