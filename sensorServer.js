@@ -3,7 +3,7 @@ var http = require('http').Server(app);
 var https = require('https');
 var config = require(__dirname + '/APIConfig.json');
 var Promise = require('es6-promise').Promise;
-var processPort = config.gpsServerPort;
+var processPort = config.sensorServerPort;
 var fs = require('fs');
 var file = config.reciever;
 
@@ -28,7 +28,7 @@ gps.on('GGA', function (data) {
     if (config.AgreegatorId !== null && data && data.lat && data.lon) {
       var contents = fs.readFileSync(__dirname + config.AgreegatorIdFilePath);
       config = JSON.parse(contents);
-      performRequest(config.APIforSendDataEndpoint, 'POST', {
+      performRequest(config.APIforSendGpsDataEndpoint, 'POST', {
         AgreegatorId: config.AgreegatorId,
         latitude: data.lat,
         longitude: data.lon,
@@ -49,9 +49,9 @@ function performRequest(endpoint, method, data, success) {
   var dataString = JSON.stringify(data);
   endpoint += '?' + querystring.stringify(data);
   var options = {
-    hostname: config.HostName,
+    hostname: config.ApiHostName,
     path: endpoint,
-    port: config.HostPort,
+    port: config.ApiHostPort,
     method: method,
     agent: false
   };
