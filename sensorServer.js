@@ -75,7 +75,6 @@ http.listen(processPort, function () {
   console.log('listening on *:' + processPort);
 });
 
-//TODO:comment if local
 port.on('data', function (data) {
   gps.update(data);
 });

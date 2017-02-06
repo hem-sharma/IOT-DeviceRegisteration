@@ -6,14 +6,12 @@ var processPort = config.bootupStarterPort;
 var exec = require('child_process').exec,
     child;
 
+console.log('agreegator bootupStarter running on *:' + processPort);
+
 setTimeout(function () {
     console.log('restarting agreegator app now to assure gps properly connected after bootup');
     restartProcessForGps();
 }, 10000);
-
-http.listen(processPort, function () {
-    console.log('agreegator bootupStarter running on *:' + processPort);
-});
 
 //restart agreegator api once after bootup assuring gps device connected perfectly
 function restartProcessForGps() {
