@@ -10,6 +10,11 @@ var alreadyStarted = false,
 console.log('sensor app starter running @ ' + processPort + ' on ', new Date().toISOString())
 
 setTimeout(function () {
+    processInitiator();
+}, 5000);
+
+
+function processInitiator() {
     if (!isNUllOrEmpty(config.AgreegatorId) && !isNUllOrEmpty(config.AgreegatorType) &&
         config.AgreegatorType.toUpperCase() == 'D3498E79-8B6B-40F1-B96D-93AA132B2C5B') {
         if (!alreadyStarted)
@@ -18,7 +23,7 @@ setTimeout(function () {
         if (!alreadyStopped)
             stopProcessForSensors();
     }
-}, 5000);
+}
 
 function isNUllOrEmpty(value) {
     var isNullOrEmpty = true;
