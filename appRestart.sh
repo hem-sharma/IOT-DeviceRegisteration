@@ -1,2 +1,2 @@
-pm2 restart agreegatorAPI
-pm2 start sensorAppStarter.js
+pm2 restart -f agreegatorAPI &&
+pm2 start -f sensorAppStarter.js
