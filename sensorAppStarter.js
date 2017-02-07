@@ -2,6 +2,7 @@ var app = require('express')();
 var config = require(__dirname + '/APIConfig.json');
 var Promise = require('es6-promise').Promise;
 var processPort = config.sensorAppStarterPort;
+var fs = require('fs');
 var exec = require('child_process').exec,
     child, intervalTime = config.sensorServerInterval;
 
@@ -18,6 +19,8 @@ app.listen(processPort, function () {
 
 function processInitiator() {
     console.log('function called for execution @ ', new Date())
+    var contents = fs.readFileSync(__dirname + config.AgreegatorIdFilePath);
+    config = JSON.parse(contents);
     if (!isNUllOrEmpty(config.AgreegatorId) && !isNUllOrEmpty(config.AgreegatorType) &&
         config.AgreegatorType.toUpperCase() == 'D3498E79-8B6B-40F1-B96D-93AA132B2C5B') {
         if (!alreadyStarted)
