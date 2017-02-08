@@ -12,7 +12,7 @@ var alreadyStarted = false,
 console.log('sensor app starter running @ ' + processPort + ' on ', new Date())
 
 app.listen(processPort, function () {
-    setInterval(function () {
+    setTimeout(function () {
         processInitiator();
     }, intervalTime);
 })
